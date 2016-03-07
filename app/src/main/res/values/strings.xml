@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">GeoQuiz</string>
     <string name="action_settings">Settings</string>
-    <string name="question_text">BeiJing is the largest city in china</string>
+    <string name="question_beijing">BeiJing is the largest city in china</string>
+    <string name="question_shanghai">ShangHai is the most beautiful city in china</string>
+    <string name="question_guangzhou">GuangZhou is the largest city in china</string>
     <string name="true_button">True</string>
     <string name="false_button">False</string>
+    <string name="next_button">Next</string>
     <string name="correct_toast">Correct!</string>
     <string name="incorrect_toast">Incorrect!</string>
 </resources>
