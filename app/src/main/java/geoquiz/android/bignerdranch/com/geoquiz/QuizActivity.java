@@ -17,6 +17,9 @@ public class QuizActivity extends Activity {
     private Button mNextButton;
     private int mCurrentQuestionIndex = 0;
 
+    private static final String TAG = "QuizActivity";
+    private static final String KEY_INDEX = "index";
+
     private TrueFalse[] mQuestionBank = new TrueFalse[] {
         new TrueFalse(R.string.question_beijing, true),
         new TrueFalse(R.string.question_shanghai, true),
@@ -27,7 +30,12 @@ public class QuizActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_quiz);
+
+        if(savedInstanceState != null && savedInstanceState.get(KEY_INDEX) != null) {
+            mCurrentQuestionIndex = savedInstanceState.getInt(KEY_INDEX);
+        }
 
         mQuestionTextView = (TextView)findViewById(R.id.question_text_view);
         updateQuestion();
@@ -79,9 +87,48 @@ public class QuizActivity extends Activity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.d(TAG, "onSaveInstanceState() called");
+        savedInstanceState.putInt(KEY_INDEX, mCurrentQuestionIndex);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_quiz, menu);
         return true;
     }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        Log.d(TAG, "onStart() called");
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Log.d(TAG, "onPause() called");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called");
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.d(TAG, "onStop() called");
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Log.d(TAG, "onDestroy called");
+    }
+
+
 }
