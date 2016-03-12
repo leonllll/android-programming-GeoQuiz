@@ -1,6 +1,7 @@
 package geoquiz.android.bignerdranch.com.geoquiz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,7 +16,10 @@ public class QuizActivity extends Activity {
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
+    private Button mCheatButton;
+
     private int mCurrentQuestionIndex = 0;
+    private boolean mIsCheater;
 
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
@@ -62,7 +66,18 @@ public class QuizActivity extends Activity {
             @Override
             public void onClick(View v) {
                 mCurrentQuestionIndex = (mCurrentQuestionIndex + 1) % mQuestionBank.length;
+                mIsCheater = false;
                 updateQuestion();
+            }
+        });
+
+        mCheatButton = (Button)findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(QuizActivity.this, CheatActivity.class);
+                intent.putExtra(CheatActivity.EXTRA_ANSWER_IS_TRUE, mQuestionBank[mCurrentQuestionIndex].isTrueQuestion());
+                startActivityForResult(intent, 0);
             }
         });
     }
@@ -77,12 +92,17 @@ public class QuizActivity extends Activity {
 
         int messageResId = 0;
 
-        if(answerIsTrue == userPressTrue) {
-            messageResId = R.string.correct_toast;
+        if(mIsCheater) {
+            messageResId = R.string.judgement_toast;
         } else {
-            messageResId = R.string.incorrect_toast;
+            if (answerIsTrue == userPressTrue) {
+                messageResId = R.string.correct_toast;
+            } else {
+                messageResId = R.string.incorrect_toast;
+            }
         }
-        Toast.makeText(QuizActivity.this,messageResId,Toast.LENGTH_SHORT)
+
+        Toast.makeText(QuizActivity.this, messageResId, Toast.LENGTH_SHORT)
                 .show();
     }
 
@@ -93,6 +113,14 @@ public class QuizActivity extends Activity {
         savedInstanceState.putInt(KEY_INDEX, mCurrentQuestionIndex);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 0) {
+            if(data != null) {
+                mIsCheater = data.getBooleanExtra(CheatActivity.EXTRA_ANSWER_SHOWN, false);
+            }
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
